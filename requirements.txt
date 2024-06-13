@@ -1,1 +1,6 @@
 inference
+pytz
+supervision
+gspread
+google-auth
+opencv-python-headless
