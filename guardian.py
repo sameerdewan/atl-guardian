@@ -1,4 +1,5 @@
 # Imports
+import os
 import signal
 import sys
 from datetime import datetime
@@ -73,7 +74,7 @@ def run_pipeline(api_key, worksheet, writer):
 
 
 if __name__ == "__main__":
-    api_key = 'YOUR_ROBOFLOW_API_KEY'
+    api_key = os.getenv("ROBOFLOW_API_KEY")
 
     worksheet = setup_google_sheets()
     writer = setup_video_writer()
