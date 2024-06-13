@@ -63,7 +63,7 @@ def run_pipeline(api_key, worksheet, writer):
         model_id="vehicle-detection-3mmwj/1",
         max_fps=0.5,
         confidence=0.3,
-        video_reference="https://webcams.nyctmc.org/api/cameras/053e8995-f8cb-4d02-a659-70ac7c7da5db/image",
+        video_reference="https://webcams.nyctmc.org/api/cameras/04e09ed5-2d97-4e29-8438-b87748850dbb/image",
         on_prediction=lambda predictions, video_frame: on_prediction(
             predictions, video_frame, writer, worksheet),
         api_key=api_key
