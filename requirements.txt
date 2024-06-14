@@ -1,0 +1,7 @@
+inference
+pytz
+supervision
+gspread
+google-auth
+opencv-python-headless==4.10.0.82
+streamlit==1.35.0
