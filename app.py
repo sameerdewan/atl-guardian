@@ -18,9 +18,15 @@ def process_image(image_url):
     # Perform inference
     results = model.infer(image=image_url, confidence=0.1, iou_threshold=0.1)
 
-    print(results)
-
     detections = results[0].predictions
+    filter_classes = {
+        "car": (255, 0, 0),
+        "truck": (0, 255, 0),
+        "bus": (0, 0, 255),
+        "motorcycle": (255, 255, 0),
+        "bicycle": (0, 255, 255),
+        "person": (255, 0, 255),
+    }
 
     # Fetch the image to annotate
     response = requests.get(image_url, stream=True)
@@ -36,16 +42,17 @@ def process_image(image_url):
 
     # Annotate frame
     for det in detections:
-        x1 = int(det.x - det.width / 2)
-        y1 = int(det.y - det.height / 2)
-        x2 = int(det.x + det.width / 2)
-        y2 = int(det.y + det.height / 2)
-        label = f"{det.class_name}: {det.confidence:.2f}"
-        color = (0, 255, 0)  # Green color for bounding box
-        cv2.rectangle(image, (x1, y1), (x2, y2), color, 2)
-        cv2.putText(
-            image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2
-        )
+        if det.class_name in filter_classes:
+            x1 = int(det.x - det.width / 2)
+            y1 = int(det.y - det.height / 2)
+            x2 = int(det.x + det.width / 2)
+            y2 = int(det.y + det.height / 2)
+            label = f"{det.class_name}: {det.confidence:.2f}"
+            color = filter_classes[det.class_name]
+            cv2.rectangle(image, (x1, y1), (x2, y2), color, 2)
+            cv2.putText(
+                image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2
+            )
 
     return image
 
