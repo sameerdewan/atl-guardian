@@ -54,7 +54,6 @@ def main(image_url):
     cam_footage = st.empty()
 
     while True:
-        # Process the image URL directly
         annotated_image = process_image(image_url)
 
         if annotated_image is not None:
