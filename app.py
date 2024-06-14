@@ -8,8 +8,7 @@ import streamlit as st
 
 # Configuration
 FRAME_RATE = 1  # frames per second
-VIDEO_SIZE = (640, 480)  # Set your desired video size
-# OUTPUT_FILE = "annotated_timelapse.mp4"
+VIDEO_SIZE = (700, 480)
 
 # Initialize model
 model = get_model(model_id="yolov8n-640")
@@ -51,44 +50,22 @@ def process_image(image_url):
     return image
 
 
-def setup_video_writer(filename, size, fps):
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    writer = cv2.VideoWriter(filename, fourcc, fps, size)
-    return writer
-
-
-# def setup_signal_handler(writer):
-#     def signal_handler(sig, frame):
-#         writer.release()
-#         sys.exit(0)
-
-
 def main(image_url):
-    # writer = setup_video_writer(OUTPUT_FILE, VIDEO_SIZE, FRAME_RATE)
-    # setup_signal_handler(writer)
+    cam_footage = st.empty()
 
-    placeholder = st.empty()
+    while True:
+        # Process the image URL directly
+        annotated_image = process_image(image_url)
 
-    try:
-        while True:
-            # Process the image URL directly
-            annotated_image = process_image(image_url)
+        if annotated_image is not None:
+            # Resize the image to match video size
+            annotated_image = cv2.resize(annotated_image, VIDEO_SIZE)
 
-            if annotated_image is not None:
-                # Resize the image to match video size
-                annotated_image = cv2.resize(annotated_image, VIDEO_SIZE)
+            # Display the image
+            cam_footage.image(annotated_image)
 
-                # Write the frame to the video file
-                # writer.write(annotated_image)
-
-                # Display the image
-                placeholder.image(annotated_image)
-
-            # Wait for the next frame
-            time.sleep(1 / FRAME_RATE)
-    finally:
-        # writer.release()
-        pass
+        # Wait for the next frame
+        time.sleep(1 / FRAME_RATE)
 
 
 if __name__ == "__main__":
